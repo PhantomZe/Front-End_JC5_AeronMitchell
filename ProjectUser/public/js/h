@@ -1,0 +1,9 @@
+<div class="col-xs-4 game" id="G1">
+                    <h5>Action Game</h5>
+                    <br>
+                    <a href="action.html"><img src="img/action.jpg"></a>
+                </div>
+                <div class="col-xs-4 game" id="G1">
+                    <h5>Simulation Game</h5>
+                    <br>
+                    <a href="action.html"><img src="img/sim.jpg"></a>

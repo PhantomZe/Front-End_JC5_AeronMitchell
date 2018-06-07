@@ -1,0 +1,598 @@
+.StyleG
+{
+    width: 100%;
+}
+body
+{
+    background-image: url("img/cover2.jpg");
+    background-size: cover;
+    
+}
+.container
+{
+    background-color: black;
+}
+.IsiH
+{
+    background-image: url("img/samping.jpg");
+    height: auto;
+    background-size: cover;
+    border: 5px solid black;
+}
+
+.fluid
+{
+    /* background-image: url("img/atas.jpg"); */
+    background: radial-gradient(white,black);
+    height: 100px;
+    background-size: cover;
+    border: 3px solid black;
+    width: auto;
+}
+.loRe
+{   
+    text-align: end;
+    font-size: 50px;
+}
+.welcome
+{
+    text-align:start;
+    font-size :50px;
+    font-family: "Impact", Arial;
+    font-style: italic;
+    text-transform: uppercase;
+    text-shadow: -4px 4px 4px red;
+    letter-spacing: 2px;
+    color: slateblue;
+}
+
+a[href]
+{
+    text-decoration: none;
+    color: powderblue;
+
+}
+a:hover
+{
+    color: seagreen;
+    text-decoration: none;
+}
+.Judul
+{
+    text-align:start;
+    font-size :50px;
+    font-family: "Impact", Arial;
+    font-style: initial;
+    text-transform: uppercase;
+    text-shadow: -4px 4px 4px black;
+    letter-spacing: 2px;
+    color: whitesmoke;
+}
+h2
+{
+    color: indigo;
+}
+#G1
+{
+    background:radial-gradient(blueviolet,white);
+    border: 1px solid black;
+    
+}
+#GG
+{
+    font-size: 30px;
+    font-family: "Impact", Arial;
+    font-style: initial;
+    text-transform: uppercase;
+    text-shadow: -4px 4px 4px black;
+    letter-spacing: 2px;
+    color: whitesmoke;
+}
+#hh
+{
+    
+    border: 1px solid black;
+}
+#G2
+{
+    background-color: aliceblue;
+    border: 1px solid black;
+}
+.Game
+{   
+    border: 1px solid black;
+}
+img
+{
+    height:100px;
+    width: 150px;
+    object-position: center;
+}
+.tulisan
+{
+    color: black;
+    font-size: 15px;
+}
+.Button
+{
+    background: radial-gradient(wheat,white);
+    color: yellow;
+    height: 30px;
+    width: auto;
+}
+.Button:visited
+{
+    background: radial-gradient(purple,white);
+}
+.button1
+{
+    height: 30px;
+}
+a:visited
+{
+    color: purple;
+}
+.login
+{
+    background-color: powderblue;
+    position: absolute ;
+    top: 100px;
+    height: auto;
+    width: 500px;
+}
+.Register
+{
+    background-color: powderblue;
+    position: absolute ;
+    top: 100px;
+    height: auto;
+    width: 500px
+}
+input
+{
+    width: 200px;
+}
+.tgl
+{
+    width: 100px;
+}
+#tgl2
+{
+    width: 50px;
+}
+#submit
+{
+    width: 100px;
+}
+#Home
+{
+    width: 100%;
+    height: auto;
+}
+#Game1,#Game2,#Game3
+{
+    display: grid;
+    grid-row-gap: 20px;
+}
+.foot
+{
+    text-align: center;
+    color: black;
+}
+.footer
+{
+    background: linear-gradient(black,white);
+    
+}
+.Slide
+{
+    
+    height: 300px;
+    width: 600px;
+}
+#s1,#s2,#s3
+{
+    width: 100%;
+    min-height: 200px;
+    max-height: 300px;
+}
+#Late
+{
+    display: grid;
+    grid-row-gap: 20px;
+}
+#Latest
+{
+    color: black;
+    text-shadow: aliceblue;
+    text-align: center;
+    font-size: 20px;
+}
+.IsiJudul
+{
+    color: red;
+    text-shadow: purple;
+    text-align: center;
+    font-size: 10px;
+}
+#Jgame
+{
+    text-decoration: underline;
+    text-align: center;
+}
+.Action
+{
+    background-image: url("img/Actionw.jpg");
+    background-size: cover;
+}
+@media only screen and (min-width : 481px) {
+    .flex-row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .flex-row > [class*='col-'] {
+        display: flex;
+        flex-direction: column;
+    }
+    .flex-row.row:after, 
+    .flex-row.row:before {
+        display: flex;
+    }
+}
+#my-row
+{
+    background-color: lightskyblue;
+}
+/* .kiri
+{
+    border: 3px solid black;
+    background-color: purple;
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
+#my-row 
+{
+    display: table;
+}
+.kanan
+{
+    border: 3px solid black;
+    background-color: white;
+    float: none;
+    display: table-cell;
+    vertical-align: top; 
+}*/
+#anak
+{
+    font-size: 30px;
+    color: royalblue;
+}
+.Isinya
+{
+    color: black;
+    font-size: 15px;
+}
+.isiaction
+{
+    background-image: url("img/isin.jpg");
+    border: 5px solid black;
+}
+.space
+{
+    display: grid;
+    grid-row-gap: 20px;
+
+}
+.Isi
+{
+    height: auto;
+    display: grid;
+    grid-row-gap: 10px;
+}
+#isigame
+{
+    width: 100%;
+    
+}
+.namag, .hargag
+{
+    font-size: large;
+    font-family: fantasy;
+    color: black;
+    text-shadow: -4px 4px 4px red;
+    text-align: center
+}
+.isimargin
+{
+    padding: 30px;
+}
+
+.Judulg
+{
+    color: beige;
+    text-align: left;
+    text-shadow: -4px 5px 5px white;
+    font-family:'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+#Galery
+{
+    display: grid;
+    grid-row-gap: 20px;
+}
+.gal
+{
+    height: 100px;
+    width: 100px;
+}
+.GG
+{
+    width: 100%;
+    max-height: 100%;
+}
+#BBMENU
+{
+    float: right;
+    background-color: blanchedalmond;
+    border: 1px solid black;
+    position: fixed;
+}
+.Pilih
+{
+    
+    display: grid;
+    grid-row-gap: 20px;
+}
+#Menu
+{
+    border-color: black;
+    height: 5px;
+    width: 100%;
+}
+.Sim
+{
+    background-image: url("img/simw.jpg");
+    background-size:cover;
+}
+.isiSim
+{
+    background-image: url("img/simww.jpg");
+    background-size: cover;
+    border: 3px solid black;
+}
+.Horror
+{
+    background-image: url("img/hor.jpg");
+    background-size: cover;
+}
+.isiHorror
+{
+    background-image: url("img/horrror.jpg");
+    background-size: auto;
+    border: 3px solid black;
+}
+.Fantasy
+{
+    background-image: url("img/Fantasy1.jpg");
+    background-size: cover;
+}
+.isiFantasy
+{
+    background-image: url("img/Fantasy2.jpg");
+    background-size: cover;
+    border: 3px solid black;
+}
+.RPG
+{
+    background-image: url("img/rpg1.jpg");
+    background-size: cover;
+}
+.isiRPG
+{
+    background-image: url("img/rpg2.jpg");
+    background-size: cover;
+    border: 3px solid black;
+}
+.balik
+{
+    display: grid;
+    grid-row-gap: 5px;
+}
+.balisk
+{
+    font-size: 15px;
+    
+}
+#drop
+{
+    margin-bottom:10px;
+}
+.Survival
+{
+    background-image: url("img/sur1.jpg");
+    background-size: cover;
+    
+}
+.isiSurvival
+{
+    background-image: url("img/sur2.jpg");
+    background-size: cover;
+    border: 3px solid black;
+    
+}
+.Atas
+{
+    background-color: grey;
+}
+.Sport
+{
+    background-image: url("img/ss.jpg");
+    background-size: cover;
+}
+.isiSport
+{   
+    background-image: url("img/ss1.jpg");
+    background-size: cover;
+    border: 3px solid black;
+}
+.Foto
+{
+    width: 200px;
+    height: 200px;
+    background-color: aqua;
+    border: 2px solid grey;
+    box-shadow: 3px 4px 3px slategray;
+}
+.Fotoid
+{
+    height: 100%;
+    width: 100%;
+}
+.Prof
+{
+    background-color: beige;
+    border:  1px solid black
+
+}
+.imag
+{
+    width: 100%;
+    
+}
+.foter
+{
+    width: 100%;
+    height: 100PX;
+    
+}
+.isifoter
+{
+    width: 100%;
+    height: auto;
+    display: grid;
+    background-color: white;
+    
+}
+.about
+{
+    background-color: whitesmoke;
+    height: max-content;
+    border: 2px solid gray;
+    box-shadow: gray;
+}
+#Bawah
+{
+    background: none;
+    width: 100%;
+}
+.JudulF
+{
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: -5px 4px 3px black;
+    color: black;   
+}
+.Prod
+{
+    width: 60%;
+}
+.nama
+{
+    color: black;
+}
+.Quan
+{
+    width: 10%;
+}
+.Harga
+{
+    width: 20%;
+}
+.Cancel
+{
+    width: 10%;
+}
+.Pemb
+{
+    color: black;
+    text-shadow: -3px 3px 3px palegreen;
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif
+}
+#Kredit,#Debit,#Cash
+{
+    width: 100%;
+    max-height: 20%;
+    border: 2px solid black;
+    align-content: center;
+}
+.Check
+{
+    position: relative;
+    left:10%;
+}
+.GambarProd
+{
+    float: left;
+    width:35%;
+    height: 35%;
+    background: blue;
+    display: grid;
+    grid-column-gap: 10px;
+    grid-row-gap: 20px;
+}
+.DetailProd
+{
+    float: right;
+    width: 60%;
+    height: 70%;
+    background: darkcyan;
+    border: 2px solid whitesmoke;
+    box-shadow: 3px 3px 3px gray
+}
+#GambarP
+{
+    width: 100%;
+    max-height: 250px;
+}
+.Beli
+{
+    float: left;
+    width: 35%;
+    height: 50%;
+}
+.MinMax
+{
+    color: blue;
+}
+gr
+{
+    color: darkgrey;
+}
+Prod,.Prod
+{
+    color: whitesmoke
+}
+.Add
+{
+    background-color: lightblue;
+    height: 20%;
+}
+.TO
+{
+    background-color: 'yellow';
+    position: relative;
+    left: 30%;
+    width: 70%;
+    height: 55%;
+}
+.Cart
+{
+    width: 100%;
+    background:lightgoldenrodyellow ;
+}
+#ResTab
+{
+    overflow-x: scroll;
+    overflow-y: scroll;
+}

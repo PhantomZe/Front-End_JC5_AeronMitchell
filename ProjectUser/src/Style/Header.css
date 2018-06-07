@@ -1,0 +1,15 @@
+.Atas
+{
+    background-color: black;
+    height: 25px;
+    border: 1px solid white;
+}
+.Logo
+{
+    width:25px;
+    height:25px;
+}
+#Drop
+{
+    padding:10px;
+}
