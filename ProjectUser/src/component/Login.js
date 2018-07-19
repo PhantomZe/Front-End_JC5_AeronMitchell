@@ -1,12 +1,70 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
-
+import { Link, Route,Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import axios from 'axios';
 
 
 class Login extends Component
 {
+    // increment = () => {  
+    //     this.props.dispatch({type:'INCREMENT'});
+    //   }
+      
+    //   decrement = () => {  
+    //     this.props.dispatch({type:'DECREMENT'});
+    //   }
+      
+    //   klik = (apa) => {    
+    //       this.props.dispatch({type:'KLIK', value: apa.nama.value, value2: apa.pass.value});    
+    //      }
+    state =
+    {
+        signinres:'',
+        redirect:false,
+        userid:'',
+    }
+    
+    Login(obj)
+    {
+        var self=this;
+        axios.post('http://localhost:3001/login',
+        {
+            Username:obj.Username.value,
+            password:obj.password.value
+        })
+        .then(function(response)
+        {
+            self.setState({userid:response.data.userid});
+            console.log(self.state.userid);
+            // if(response.data.userid>=1)
+            // {
+            //     self.setState({signinres:'Login Berhasil'})
+            //     self.setState({redirect:true})
+            //     self.setState({userid:response.data.userid})
+                
+            // }
+            // else
+            // {
+            //     self.setState({signinres:'Terjadi Kesalahan pada Username / Password'})
+            // }
+            if(self.state.userid>=1)    
+            {
+                self.setState({redirect:true})
+                self.setState({userid:response.data.userid});
+            }
+            else
+            {
+                self.setState({signinres:'Login Gagal'})
+            }
+        })
+    }
     render()
     {
+        if(this.state.redirect)
+        {
+            this.props.dispatch({type:'Login',userid:this.state.userid});
+            return <Redirect to='/'/>
+        }
         var color=
         {
             color:"black"
@@ -20,25 +78,26 @@ class Login extends Component
                     </div>
                     <div className="col-sm-12 col-md-12 isi">
                         <hr id="Menu"/>
-                        <p className="Input">E-mail</p><input type="email" required/>
+                        <p className="Input">Username</p><input type="text" minLength='4' maxLength='20' ref='Username' required/>
                     </div>
                     <br/>
                     <div className="col-sm-12 col-md-12 isi">
-                        <p className="Input">Password</p><input type="password" minlength="8" maxlength="15" required/>
+                        <p className="Input">Password</p><input type="password" ref='password' minLength="4" maxLength="20" required/>
                     </div>
                     <br/>
                     <div className="col-sm-12 col-md-12 buton">
                         <hr id="Menu"/>
-                        <input type="submit" id="submit" value="Login"/>
+                        <span style={{color:'red'}}>{this.state.signinres}</span><br/>
+                        <input type="submit" id="submit" onClick={() => this.Login(this.refs)} value="Login"/>
                     </div>
                     <div className="col-sm-12 col-md-12 isi">
-                        <Link to="/"><a href="#"><button className="Button" value="Home" id="Home"><p className="tulisan">Home</p></button></a></Link>
+                    <Link to="/"><button className="Button" value="Home" id="Home"><p className="tulisan">Home</p></button></Link>
                     </div>
                     <div className="col-sm-12 col-md-12 balik">
                         <p className="balisk">
-                            Belum punya account ?
+                            Belum punya account ?{this.props.userid}
                         
-                        <Link to="/Register"><a href="#"><span style={color}>Register</span></a></Link>
+                        <Link to="/Register"><span style={color}>Register</span></Link>
                     </p>
                     </div>
                 </div>
@@ -47,4 +106,10 @@ class Login extends Component
         );
     }
 }
-export default Login;
+function mapStateToProps(state){
+    return {
+        masuk:state.userid
+    };
+  }
+
+export default connect(mapStateToProps)(Login)

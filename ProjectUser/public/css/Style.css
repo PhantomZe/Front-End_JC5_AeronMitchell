@@ -150,7 +150,8 @@ a:visited
 }
 input
 {
-    width: 200px;
+    width: auto;
+    padding: 1px;
 }
 .tgl
 {
@@ -286,6 +287,7 @@ input
 }
 .Isi
 {
+    padding: 10px;
     height: auto;
     display: grid;
     grid-row-gap: 10px;

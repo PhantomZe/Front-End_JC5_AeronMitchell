@@ -7,7 +7,8 @@ import IndexH from './Component/Index';
 import Table from './Component/Table';
 import Additem from './Component/Adding/Additem';
 import AddCategory from './Component/Adding/AddCategory';
-import Edit from './Component/Adding/Edit';
+import EditProduct from './Component/Adding/Edit';
+import EditCategory from './Component/Adding/EditCategory';
 
 import Login from './Component/Login';
 import ForgotPass from './Component/ForgotPass';
@@ -24,7 +25,8 @@ class App extends Component {
         <Route path="/ForgotPass" component={ForgotPass}/>
         
         <Route path="/Table" component={Table}/>
-          <Route path="/Edit" component={Edit}/>
+          <Route path="/Edit" component={EditProduct}/>
+          <Route path="/EditCategory" component={EditCategory}/>
           <Route path="/Additem" component={Additem}/>
           <Route path="/AddCategory" component={AddCategory}/>
       </div>

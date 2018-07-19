@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
 
 import HeaderM2 from './../HeaderM2';
 import HeaderD from './../HeaderD';

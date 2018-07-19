@@ -1,8 +1,51 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
+import axios from 'axios';
+
 
 class Login extends Component
 {
+    state =
+    {
+        signinres:'',
+        redirect:false,
+        userid:''
+    }
+    Login(obj)
+    {
+        var self=this;
+        axios.post('http://localhost:3001/LoginAdmin',
+        {
+            Email:obj.Username.value,
+            password:obj.password.value
+        })
+        .then(function(response)
+        {
+            console.log(response.data);
+            console.log(response.data.userid);
+            var D=response.data.userid;
+            // if(response.data.userid>=1)
+            // {
+            //     self.setState({signinres:'Login Berhasil'})
+            //     self.setState({redirect:true})
+            //     self.setState({userid:response.data.userid})
+                
+            // }
+            // else
+            // {
+            //     self.setState({signinres:'Terjadi Kesalahan pada Username / Password'})
+            // }
+            if(D == 1)
+            {
+                self.setState({signinres:'Login Berhasil'}),
+                self.setState({redirect:true})
+            }
+            else
+            {
+                self.setState({signinres:'Login Gagal'})
+            }
+        })
+    }
     render()
     {
         return(
@@ -28,13 +71,10 @@ class Login extends Component
                                         </div>
                                         <div className="login-checkbox">
                                             <label>
-                                                <input type="checkbox" name="remember"/>Remember Me
-                                            </label>
-                                            <label>
                                                 <a href="forget-pass.html">Forgotten Password?</a>
                                             </label>
                                         </div>
-                                        <button className="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
+                                        <button onClick={() => this.Login(this.refs)} className="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
                                     </form>
                                 </div>
                             </div>

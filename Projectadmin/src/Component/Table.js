@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
-
+import axios from 'axios';
 
 import HeaderM1 from './HeaderM1';
 import HeaderD from './HeaderD';
@@ -8,8 +8,40 @@ import HeaderD from './HeaderD';
 
 class Table extends Component
 {
+    state=
+    {
+        IsiCategory:[],
+    }
+    componentDidMount()
+    {
+        axios.get(`http://localhost:3001/IsiCategory`).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                console.log(ambilData.data);
+                this.setState({
+                    IsiCategory: ambilData.data
+                });
+            }
+        )
+    }
     render()
     {
+        const Category = this.state.IsiCategory.map(
+            (isi, urutan) => 
+            {
+                var id= isi.id;
+                var namacategory = isi.category;
+                console.log(id)
+                return <tr key={urutan} style={{textAlign: 'left'}}>
+                <td>
+                <Link to={{pathname:'/EditCategory',state:{id:id}}}><h4>{namacategory}</h4></Link>&nbsp;
+                </td>
+                <td>    
+                    <button className="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+            }
+        );
         return(
             <div className="page-wrapper">
                 <HeaderM1 />
@@ -23,10 +55,10 @@ class Table extends Component
                                         <div className="overview-wrap">
                                             <h2 className="title-1">Earning By Games</h2>
                                             <div className="btn-group btn-group-lg navbar-right">
-                                            <a href="newitem.html"><button className="au-btn au-btn-icon au-btn--blue">
+                                            <a href="#"><button className="btn btn-lg btn-outline-primary">
                                             <Link to="/Additem"><i className="zmdi zmdi-plus"></i>add item</Link></button></a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <a href="newcategory.html"><button className="au-btn au-btn-icon au-btn--blue">
+                                            <a href="#"><button className="btn btn-lg btn-outline-primary">
                                             <Link to="/AddCategory"><i className="zmdi zmdi-plus"></i>add Category</Link></button></a>
                                             </div>
                                         </div>
@@ -119,35 +151,10 @@ class Table extends Component
                                         <div className="au-card au-card--bg-blue au-card-top-countries m-b-30">
                                             <div className="au-card-inner">
                                                 <div className="table-responsive">
-                                                    <table className="table table-top-countries">
+
+                                                    <table  class="table table-top-countries">
                                                             <tbody>
-                                                                    <tr>
-                                                                        <td>Action</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Simulation</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Fantasy</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Horror</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>RPG</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Survival</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>War</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Sport</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Strategy</td>
-                                                                    </tr>
+                                                                {Category}
                                                             </tbody>
                                                     </table>
                                                 </div>
@@ -161,7 +168,8 @@ class Table extends Component
                                             <h3 className="title-3 m-b-30">
                                                 <i className="zmdi zmdi-account-calendar"></i>user data</h3>
                                             <div className="filters m-b-45">
-Name                                                <div class="rs-select2--dark rs-select2--md m-r-10 rs-select2--border">
+                                                Name                                        
+                                                <div class="rs-select2--dark rs-select2--md m-r-10 rs-select2--border">
                                                     <select class="js-select2" name="property">
                                                         <option selected="selected">All Properties</option>
                                                         <option value="">Admin</option>
@@ -355,7 +363,7 @@ Name                                                <div class="rs-select2--dark
                                                 </div>
                                             </div>
                                             <div className="table-data__tool-right">
-                                                <a href="newitem.html"><button className="au-btn au-btn-icon au-btn--green au-btn--small">
+                                                <a href="#"><button className="au-btn au-btn-icon au-btn--green au-btn--small">
                                                 <Link to="/Additem"><i className="zmdi zmdi-plus"></i>add item</Link></button></a>
                                                 <div className="rs-select2--dark rs-select2--sm rs-select2--dark2">
                                                     <select className="js-select2" name="type">

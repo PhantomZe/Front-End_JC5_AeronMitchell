@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-
+import { connect } from 'react-redux';
 import Header from './Header';
 import Footer from './Footer';
-
+import {Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 import S1 from './img/1.jpg'
 import S2 from './img/2.jpg'
@@ -25,18 +26,45 @@ import G6 from './img/g6.jpg'
 import G7 from './img/g7.jpg'
 import G8 from './img/g8.jpg'
 import G9 from './img/g9.jpg'
-
+function mapStateToProps(state){
+    return {
+        masuk:state.userid
+    };
+  }
 
 class Home extends Component
-{
+{   
+    state={
+        username:'',
+    }
+    componentDidMount()
+    {
+        axios.get(`http://localhost:3001/Dataid/`+this.props.masuk).then(
+            (ambilData) => {
+                this.setState({
+                    username: ambilData.data[0].user_name,
+                });
+            }
+        )
+    }
     render()
     {
+        console.log(this.props.masuk);
+        if( this.props.masuk>=1)
+        {
+        }
+        else
+        {
+            
+            return <Redirect to='/Login'/>
+        }
         return(
             <div>
                 <Header />
                 <div className="col-md-offset-2 col-xs-12 col-sm-12 col-md-8 IsiH">
                     <p className="Judul tes-anim">
-                        Welcome To BB
+                        Welcome To BB!
+                        <br/>{this.state.username}
                     </p>
                     <hr/>
                     <br/>
@@ -199,4 +227,6 @@ class Home extends Component
         )
     }
 }
-export default Home;
+
+
+export default connect(mapStateToProps)(Home)

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 // import './App.css';
 import { Link, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 
 
@@ -20,6 +21,8 @@ import Profile from './component/Profile';
 
 
 import Cart from './component/Cart';
+import masuk from './component/masuk'; 
+
 
 
 import AllProduct from './component/AllProduct';
@@ -40,7 +43,6 @@ import RPG from './component/IsiCategory/RPG';
 
 
 import style from './Style/Header.css';
-
 
 class App extends Component {
   render() {
@@ -63,6 +65,7 @@ class App extends Component {
             <Route path="/Horror" component={Horror}/>
             <Route path="/Sport" component={Sport}/>
             <Route path="/Survival" component={Survival}/>
+            <Route path="/masuk" component={masuk}/> 
       </div>
     );
   }

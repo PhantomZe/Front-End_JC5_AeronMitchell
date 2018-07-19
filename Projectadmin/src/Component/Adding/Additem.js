@@ -1,13 +1,40 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
-
+import axios from 'axios';
 import HeaderM2 from './../HeaderM2';
 import HeaderD from './../HeaderD';
 
 class Additem extends Component
 {
+    state=
+    {
+        IsiCategory:[],
+    }
+    componentDidMount()
+    {
+        axios.get(`http://localhost:3001/IsiCategory`).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                console.log(ambilData.data);
+                this.setState({
+                    IsiCategory: ambilData.data
+                });
+            }
+        )
+    }
+    
     render()
     {
+        const Category = this.state.IsiCategory.map(
+            (isi, urutan) => 
+            {
+                var id= isi.id;
+                var namacategory = isi.category;
+                console.log(id)
+                return <option key={urutan} value style={{textAlign: 'left'}}>
+                {namacategory}
+                </option>
+            }
+        );
         return(
             <div className="page-wrapper">
                 <HeaderM2 />
@@ -47,25 +74,6 @@ class Additem extends Component
                                                             </div>
                                                             <div className="col-12 col-md-9">
                                                                 <input type="number" id="Price" name="Price" placeholder="Price" className="form-control"/>
-                                                            </div>
-                                                        </div>
-                                                        <div className="row form-group">
-                                                            <div className="col col-md-3">
-                                                                <label for="selectSm" className=" form-control-label">Type</label>
-                                                            </div>
-                                                            <div className="col-12 col-md-9">
-                                                                <select name="selectSm" id="SelectLm" className="form-control-sm form-control">
-                                                                    <option selected="selected" value="">Properties</option>
-                                                                    <option value="Action">Action</option>
-                                                                    <option value="Simulation">Simulation</option>
-                                                                    <option value="Fantasy">Fantasy</option>
-                                                                    <option value="RPG">RPG</option>
-                                                                    <option value="War">War</option>
-                                                                    <option value="Strategy">Strategy</option>
-                                                                    <option value="Survival">Survival</option>
-                                                                    <option value="Horror">Horror</option>
-                                                                    <option value="Sport">Sport</option>
-                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -151,10 +159,16 @@ class Additem extends Component
                                                         
                                                         <div className="row form-group">
                                                             <div className="col col-md-3">
-                                                                <label for="file-input" className=" form-control-label">Video input</label>
+                                                                <label for="file-input" className=" form-control-label">Category</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="file" id="file-input" name="file-input" className="form-control-file"/>
+                                                                <div className="rs-select2--trans rs-select2--sm">
+                                                                    <select className="js-select2" name="property">
+                                                                    <option selected='selected'>Category</option>
+                                                                        {Category}
+                                                                    </select>
+                                                                    <div className="dropDownSelect2"></div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
