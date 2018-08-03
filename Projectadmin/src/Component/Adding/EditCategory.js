@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import HeaderM2 from './../HeaderM2';
+import HeaderM from './../HeaderM';
 import HeaderD from './../HeaderD';
 import {Redirect} from 'react-router-dom';
 
@@ -21,7 +21,6 @@ class EditCategory extends Component
         var id=this.props.location.state.id
         axios.get(`http://localhost:3001/EditCategory/`+id).then(
             (ambilData) => {
-                console.log(ambilData.data);
                 this.setState({
                     Category: ambilData.data[0].category,
                     desc1: ambilData.data[0].description1,
@@ -85,7 +84,7 @@ class EditCategory extends Component
         }
         return(
             <div className="page-wrapper">
-                <HeaderM2 />
+                <HeaderM />
                 <div className="page-container">
                     <HeaderD />
                     <div className="main-content">

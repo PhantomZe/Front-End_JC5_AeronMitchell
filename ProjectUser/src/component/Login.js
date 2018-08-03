@@ -78,11 +78,11 @@ class Login extends Component
                     </div>
                     <div className="col-sm-12 col-md-12 isi">
                         <hr id="Menu"/>
-                        <p className="Input">Username</p><input type="text" minLength='4' maxLength='20' ref='Username' required/>
+                        <p className="Input">Username</p><input className="form-control" type="text" minLength='4' maxLength='20' ref='Username' required/>
                     </div>
                     <br/>
                     <div className="col-sm-12 col-md-12 isi">
-                        <p className="Input">Password</p><input type="password" ref='password' minLength="4" maxLength="20" required/>
+                        <p className="Input">Password</p><input className="form-control" type="password" ref='password' minLength="4" maxLength="20" required/>
                     </div>
                     <br/>
                     <div className="col-sm-12 col-md-12 buton">
@@ -95,7 +95,7 @@ class Login extends Component
                     </div>
                     <div className="col-sm-12 col-md-12 balik">
                         <p className="balisk">
-                            Belum punya account ?{this.props.userid}
+                            Belum punya account ?
                         
                         <Link to="/Register"><span style={color}>Register</span></Link>
                     </p>

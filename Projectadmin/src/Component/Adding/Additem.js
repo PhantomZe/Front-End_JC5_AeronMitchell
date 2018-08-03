@@ -1,13 +1,25 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import HeaderM2 from './../HeaderM2';
+import HeaderM from './../HeaderM';
 import HeaderD from './../HeaderD';
+import {Redirect} from 'react-router-dom';
 
 class Additem extends Component
 {
     state=
     {
         IsiCategory:[],
+        idCategory:0,
+        Name:'',
+        Price:0,
+        MinOs:'',MaxOs:'',
+        MinProcessor:'',MaxProcessor:'',
+        MinMemory:'',MaxMemory:'',
+        MinGraphics:'',MaxGraphics:'',
+        MinStorage:'',MaxStorage:'',
+        Picture:'',
+        redirect:false,
+        insertres:''
     }
     componentDidMount()
     {
@@ -21,23 +33,83 @@ class Additem extends Component
             }
         )
     }
-    
+    UpCategory = (obj) => 
+    {
+        this.setState({
+            idCategory:obj.target.value,
+        })
+    }
+    onchange = (e) => {
+        switch(e.target.name){
+            case 'fotoproduk':
+                this.setState({
+                    Picture: e.target.files[0],
+                });
+                break;
+        }
+      }
+    value =(obj) =>
+    {
+        this.setState({
+            Name:obj.Name.value,
+            Price:obj.Price.value,
+            MinOs:obj.MinOs.value,MaxOs:obj.MaxOs.value,
+            MinGraphics:obj.MinGraphics.value,MaxGraphics:obj.MaxGraphics.value,
+            MinMemory:obj.MinMemory.value,MaxMemory:obj.MaxMemory.value,
+            MinProcessor:obj.MinProcessor.value,MaxProcessor:obj.MaxProcessor.value,
+            MinStorage:obj.MinStorage.value,MaxStorage:obj.MaxStorage.value
+        })
+    }
+    updateData=(e)=>{
+        var self=this
+        e.preventDefault();
+        let formData = new FormData();
+        formData.append('file',self.state.Picture);
+        formData.append('Name',self.state.Name);
+        formData.append('Price',self.state.Price);
+        formData.append('MinOs',self.state.MinOs);
+        formData.append('MaxOs',self.state.MaxOs);
+        formData.append('MinGraphics',self.state.MinGraphics);
+        formData.append('MaxGraphics',self.state.MaxGraphics);
+        formData.append('MinProcessor',self.state.MinProcessor);
+        formData.append('MaxProcessor',self.state.MaxProcessor);
+        formData.append('MinMemory',self.state.MinMemory);
+        formData.append('MaxMemory',self.state.MaxMemory);
+        formData.append('MinStorage',self.state.MinStorage);
+        formData.append('MaxStorage',self.state.MaxStorage);
+        formData.append('idCategory',self.state.idCategory);
+        axios.post('http://localhost:3001/AddProduk/', formData)
+        .then(function(response)
+        {
+            if(response.data==1)
+            {
+                self.setState({redirect:true})
+            }        
+            else
+            {
+                self.setState({insertres:response.data})
+            }
+        })
+      }
     render()
     {
+        if(this.state.redirect)
+        {
+            return <Redirect to='/Table'/>
+        }
         const Category = this.state.IsiCategory.map(
             (isi, urutan) => 
             {
                 var id= isi.id;
                 var namacategory = isi.category;
-                console.log(id)
-                return <option key={urutan} value style={{textAlign: 'left'}}>
+                return <option key={urutan} value={id} style={{textAlign: 'left'}}>
                 {namacategory}
                 </option>
             }
         );
         return(
             <div className="page-wrapper">
-                <HeaderM2 />
+                <HeaderM />
                 <div className="page-container">
                     <HeaderD />
                     <div className="main-content">
@@ -50,8 +122,8 @@ class Additem extends Component
                                                 <div className="card-header">
                                                     <strong>New Game</strong>
                                                 </div>
+                                                <form className="form-horizontal" onSubmit={this.updateData} encType="multipart/form-data">
                                                 <div className="card-body card-block">
-                                                    <form action="" method="post" enctype="multipart/form-data" className="form-horizontal">
                                                         <div className="row form-group">
                                                             <div class="col col-md-3">
                                                                 <label class=" form-control-label">Static</label>
@@ -65,7 +137,7 @@ class Additem extends Component
                                                                 <label for="Name" className=" form-control-label">Game Name</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="Name" name="name" placeholder="Name" className="form-control"/>
+                                                                <input type="text" id="Name" name="name" ref='Name' placeholder="Name" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -73,7 +145,7 @@ class Additem extends Component
                                                                 <label for="Price" className=" form-control-label">Price</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="number" id="Price" name="Price" placeholder="Price" className="form-control"/>
+                                                                <input type="number" id="Price" name="Price" ref='Price' placeholder="Price" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -81,7 +153,7 @@ class Additem extends Component
                                                                 <label for="MinOs" className="form-control-label">Min Os</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MinOs" name="MinOs" placeholder="MinOs" className="form-control"/>
+                                                                <input type="text" id="MinOs" name="MinOs" ref='MinOs' placeholder="MinOs" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -89,7 +161,7 @@ class Additem extends Component
                                                                 <label for="MinProcessor" className="form-control-label">Min Processor</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MinProcessor" name="MinProcessor" placeholder="MinProcessor" className="form-control"/>
+                                                                <input type="text" id="MinProcessor" name="MinProcessor" ref='MinProcessor' placeholder="MinProcessor" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -97,7 +169,7 @@ class Additem extends Component
                                                                 <label for="MinMemory" className="form-control-label">Min Memory</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MinMemory" name="MinMemory" placeholder="MinMemory" className="form-control"/>
+                                                                <input type="text" id="MinMemory" name="MinMemory" ref='MinMemory' placeholder="MinMemory" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -105,7 +177,7 @@ class Additem extends Component
                                                                 <label for="MinGraphics" className="form-control-label">Min Graphics</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MinGraphics" name="MinGraphics" placeholder="MinGraphics" className="form-control"/>
+                                                                <input type="text" id="MinGraphics" name="MinGraphics" ref='MinGraphics' placeholder="MinGraphics" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -113,7 +185,7 @@ class Additem extends Component
                                                                     <label for="MinStorage" className="form-control-label">Min Storage</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MinStorage" name="MinStorage" placeholder="MinStorage" className="form-control"/>
+                                                                <input type="text" id="MinStorage" ref='MinStorage' name="MinStorage" placeholder="MinStorage" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -121,7 +193,7 @@ class Additem extends Component
                                                                 <label for="MaxOs" className="form-control-label">Max Os</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MaxOs" name="MaxOs" placeholder="MaxOs" className="form-control"/>
+                                                                <input type="text" id="MaxOs" name="MaxOs" ref='MaxOs' placeholder="MaxOs" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -129,7 +201,7 @@ class Additem extends Component
                                                                 <label for="MaxProcessor" className="form-control-label">Max Processor</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MaxProcessor" name="MaxProcessor" placeholder="MaxProcessor" className="form-control"/>
+                                                                <input type="text" id="MaxProcessor" name="MaxProcessor" ref='MaxProcessor' placeholder="MaxProcessor" className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -137,7 +209,7 @@ class Additem extends Component
                                                                 <label for="MaxMemory" className="form-control-label">Max Memory</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MaxMemory" name="MaxMemory" placeholder="MaxMemory" className="form-control"/>
+                                                                <input type="text" id="MaxMemory" name="MaxMemory" placeholder="MaxMemory" ref='MaxMemory' className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -145,7 +217,7 @@ class Additem extends Component
                                                                 <label for="MaxGraphics" className="form-control-label">Max Graphics</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MaxGraphics" name="MaxGraphics" placeholder="MaxGraphics" className="form-control"/>
+                                                                <input type="text" id="MaxGraphics" name="MaxGraphics" placeholder="MaxGraphics" ref='MaxGraphics' className="form-control"/>
                                                             </div>
                                                         </div>
                                                         <div className="row form-group">
@@ -153,7 +225,7 @@ class Additem extends Component
                                                                     <label for="MaxStorage" className="form-control-label">Max Storage</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="text" id="MaxStorage" name="MaxStorage" placeholder="MaxStorage" className="form-control"/>
+                                                                <input type="text" id="MaxStorage" name="MaxStorage" placeholder="MaxStorage" ref='MaxStorage' className="form-control"/>
                                                             </div>
                                                         </div>
                                                         
@@ -163,7 +235,7 @@ class Additem extends Component
                                                             </div>
                                                             <div className="col-12 col-md-9">
                                                                 <div className="rs-select2--trans rs-select2--sm">
-                                                                    <select className="js-select2" name="property">
+                                                                    <select onChange={this.UpCategory} className="js-select2" >
                                                                     <option selected='selected'>Category</option>
                                                                         {Category}
                                                                     </select>
@@ -176,19 +248,19 @@ class Additem extends Component
                                                                 <label for="file-multiple-input" className=" form-control-label">Picture input</label>
                                                             </div>
                                                             <div className="col-12 col-md-9">
-                                                                <input type="file" id="file-input" name="file-input" className="form-control-file"/>
+                                                                <input type="file" id="file-input" name="fotoproduk" onChange={this.onchange} className="form-control-file"/>
                                                             </div>
                                                         </div>
-                                                    </form>
                                                 </div>
                                                 <div className="card-footer">
-                                                    <button type="submit" className="btn btn-primary btn-sm">
+                                                    <button type="submit" onClick={() => this.value(this.refs)} className="btn btn-primary btn-sm">
                                                         <i className="fa fa-dot-circle-o"></i> Submit
                                                     </button>
                                                     <button type="reset" className="btn btn-danger btn-sm">
                                                         <i className="fa fa-ban"></i> Reset
                                                     </button>
                                                 </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

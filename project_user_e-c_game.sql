@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2018 at 11:12 AM
+-- Generation Time: Aug 03, 2018 at 05:31 AM
 -- Server version: 10.1.33-MariaDB
 -- PHP Version: 7.2.6
 
@@ -32,8 +32,12 @@ CREATE TABLE `cart` (
   `id` int(10) NOT NULL,
   `product_id` int(10) NOT NULL,
   `user_id` int(10) NOT NULL,
-  `process_data` int(10) NOT NULL,
-  `finalprice` int(20) NOT NULL
+  `Jumlah` int(10) NOT NULL,
+  `Time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `alamat` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'BelomAda',
+  `nama_penerima` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'BelomAda',
+  `kode_pos` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'BelomAda',
+  `hp_penerima` int(50) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -81,7 +85,7 @@ CREATE TABLE `master_user` (
 --
 
 INSERT INTO `master_user` (`id`, `E_mail`, `password`) VALUES
-(1, 'mitchellaeron14@gmail.com', '1b6a15583aed9368516951289cb6749a0a8cce01213a24af28fbde64772f9fd7');
+(2, 'mitchellaeron14@gmail.com', '7fe887ef6195e450c84bf791618900cd33e3e22c9afa4e25966301a98910e37c');
 
 -- --------------------------------------------------------
 
@@ -93,6 +97,7 @@ CREATE TABLE `product` (
   `id` int(10) NOT NULL,
   `product_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `harga` int(20) NOT NULL,
+  `stock` int(10) NOT NULL,
   `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `min_os` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `min_processor` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -102,10 +107,23 @@ CREATE TABLE `product` (
   `max_os` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `max_processor` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `max_memory` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `max_graphic` int(50) NOT NULL,
+  `max_graphic` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `max_storage` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `category_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id`, `product_name`, `harga`, `stock`, `image`, `min_os`, `min_processor`, `min_memory`, `min_graphic`, `min_storage`, `max_os`, `max_processor`, `max_memory`, `max_graphic`, `max_storage`, `category_id`) VALUES
+(3, 'Persona5', 200000, 0, 'it1tycd5scjjvjbjwk', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 1),
+(5, 'FallOut4', 200000, 0, 'it1tycd2fgjjvjx0yp', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 1),
+(6, 'StarDewValley', 100000, 0, 'it1tycd2fgjjvjzi54', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 2),
+(7, 'Yugioh', 1000000, 0, 'it1tycd2fgjjvk1xnu', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 9),
+(8, 'Dysnaty Warrior', 30000000, 5, 'it1tycd2fgjjvk5dwj', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 8),
+(9, 'Persona4', 1500000, 0, 'it1tycd2fgjjvkgoja', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 1),
+(10, 'FallOut3', 1000000, 0, 'it1tycd2fgjjvkmprq', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 'lorem', 1);
 
 -- --------------------------------------------------------
 
@@ -207,13 +225,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `master_user`
 --
 ALTER TABLE `master_user`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `profile`

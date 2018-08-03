@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Redirect,Link } from 'react-router-dom';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import Cookies from 'universal-cookie';
 
 
 class Login extends Component
@@ -16,28 +18,14 @@ class Login extends Component
         var self=this;
         axios.post('http://localhost:3001/LoginAdmin',
         {
-            Email:obj.Username.value,
+            Email:obj.email.value,
             password:obj.password.value
         })
         .then(function(response)
         {
-            console.log(response.data);
-            console.log(response.data.userid);
-            var D=response.data.userid;
-            // if(response.data.userid>=1)
-            // {
-            //     self.setState({signinres:'Login Berhasil'})
-            //     self.setState({redirect:true})
-            //     self.setState({userid:response.data.userid})
-                
-            // }
-            // else
-            // {
-            //     self.setState({signinres:'Terjadi Kesalahan pada Username / Password'})
-            // }
-            if(D == 1)
+            self.setState({userid:response.data});
+            if(self.state.userid>=1)    
             {
-                self.setState({signinres:'Login Berhasil'}),
                 self.setState({redirect:true})
             }
             else
@@ -48,6 +36,13 @@ class Login extends Component
     }
     render()
     {
+        if(this.state.redirect)
+        {
+            this.props.dispatch({type:'Login',userid:this.state.userid});
+            const cookies = new Cookies();
+            cookies.set('Login', this.state.userid, { path: '/' });
+            return <Redirect to='/'/>
+        }
         return(
             <div className="page-wrapper">
                 <div className="page-content--bge5">
@@ -63,18 +58,19 @@ class Login extends Component
                                     <form action="" method="post">
                                         <div className="form-group">
                                             <label>Email Address</label>
-                                            <input className="au-input au-input--full" type="email" name="email" placeholder="Email"/>
+                                            <input className="au-input au-input--full"ref='email' type="email" name="email" placeholder="Email"/>
                                         </div>
                                         <div className="form-group">
                                             <label>Password</label>
-                                            <input className="au-input au-input--full" type="password" name="password" placeholder="Password"/>
+                                            <input className="au-input au-input--full" type="password" ref='password' name="password" placeholder="Password"/>
                                         </div>
                                         <div className="login-checkbox">
+                                            {this.state.signinres}
                                             <label>
-                                                <a href="forget-pass.html">Forgotten Password?</a>
+                                                Forgot Password?
                                             </label>
                                         </div>
-                                        <button onClick={() => this.Login(this.refs)} className="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
+                                        <button onClick={() => this.Login(this.refs)} className="au-btn au-btn--block au-btn--green m-b-20" type="button">sign in</button>
                                     </form>
                                 </div>
                             </div>
@@ -85,4 +81,10 @@ class Login extends Component
         );
     }
 }
-export default Login;
+function mapStateToProps(state){
+    return {
+        masuk:state.userid
+    };
+  }
+
+export default connect(mapStateToProps)(Login)

@@ -5,7 +5,7 @@ import Footer from './Footer';
 import {Redirect } from 'react-router-dom';
 import axios from 'axios';
 
-import S1 from './img/1.jpg'
+//import S1 from './img/1.jpg'
 import S2 from './img/2.jpg'
 import S3 from './img/3.jpg'
 import Action from './img/action.jpg'
@@ -41,23 +41,17 @@ class Home extends Component
     {
         axios.get(`http://localhost:3001/Dataid/`+this.props.masuk).then(
             (ambilData) => {
-                this.setState({
-                    username: ambilData.data[0].user_name,
-                });
+                if(ambilData.data[0].user_name !== '0')
+                {
+                    this.setState({
+                        username: ambilData.data[0].user_name,
+                    });
+                }   
             }
         )
     }
     render()
     {
-        console.log(this.props.masuk);
-        if( this.props.masuk>=1)
-        {
-        }
-        else
-        {
-            
-            return <Redirect to='/Login'/>
-        }
         return(
             <div>
                 <Header />
@@ -75,7 +69,7 @@ class Home extends Component
                     <div className=" col-md-offset-2 col-xs-12 col-sm-12 col-md-8 Slide carousel slide" id="iniCarousel" data-ride="carousel">
                         <div className="carousel-inner">
                             <div className="item active">
-                                <img className="img-thumbnail" src={S1} id="s1"/>
+                                <img className="img-thumbnail" src={require('./img/1.jpg')} id="s1"/>
                             </div>
                             <div className="item">
                                 <img className="img-thumbnail" src={S2} id="s2"/>

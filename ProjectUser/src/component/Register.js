@@ -8,32 +8,44 @@ class Register extends Component
     state =
     {
         signinres:'',
-        redirect:false
+        redirect:false,
+        alert:false
     }
     Register(obj)
     {
         var self=this;
-        axios.post('http://localhost:3001/Register',
+        if(obj.Username.value=='' || obj.password.value=='')
         {
-            Username:obj.Username.value,
-            password:obj.password.value
-        })
-        .then(function(response)
+            self.setState({alert:true})
+        }
+        else
         {
-            console.log(response.data);
-            if(response.data==1)
+            axios.post('http://localhost:3001/Register',
             {
-                self.setState({signinres:'Register Berhasil'})
-                self.setState({redirect:true})
-            }
-            else
+                Username:obj.Username.value,
+                password:obj.password.value
+            })
+            .then(function(response)
             {
-                self.setState({signinres:'Terjadi Kesalahan pada Username / Password'})
+                console.log(response.data);
+                if(response.data==1)
+                {
+                    self.setState({signinres:'Register Berhasil'})
+                    self.setState({redirect:true})
+                }
+                else
+                {
+                    self.setState({signinres:'Username Sudah Terdaftar'})
+                }
+            })
             }
-        })
     }
     render()
     {
+        if(this.state.alert)
+        {
+            alert('UserName or Password or both still empty')
+        }
         if(this.state.redirect)
         {
             return <Redirect to='/Login'/>
@@ -50,11 +62,11 @@ class Register extends Component
                         <hr id="Menu"/>
                     </div>
                     <div className="col-sm-12 col-md-12 isi">
-                        <p className="Input">Username</p><input type="text" ref='Username' minlength="5" maxlength="10" required id="nama"/>
+                        <p className="Input">Username</p><input className="form-control" type="text" ref='Username' minlength="5" maxlength="10" id="nama"/>
                     </div>
                     <br/>
                     <div className="col-sm-12 col-md-12 isi">
-                        <p className="Input">Password</p><input type="password" ref='password' minlength="8" maxlength="15" required id="Password"/>
+                        <p className="Input">Password</p><input className="form-control" type="password" ref='password' minlength="8" maxlength="15"id="Password"/>
                     </div>
                     <br/>
                     {/* <div className="col-sm-12 col-md-12 isi">

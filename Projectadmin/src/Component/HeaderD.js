@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Cookies from 'universal-cookie';
 
 class HeaderD extends Component
 {
     render()
     {
+        const cookies = new Cookies();
+        console.log(cookies.get('Login'));
+        // if(this.props.masuk == 0 )
+        // {
+        //     return <Redirect to='/Login'/>
+        // }
+        if(cookies.get('Login') == 0)
+        {
+            return <Redirect to='/Login'/>
+        }
         return(
             <div>
                 <header className="header-desktop">
@@ -28,8 +40,7 @@ class HeaderD extends Component
                                                 <h3 className="name">PhantomZero</h3> <div className="caret"></div>
                                                 </button>
                                                     <ul className="dropdown-menu">
-                                                    <li><Link to="/Login"><a href="#">Login</a></Link></li>
-                                                    <li><Link to="/"><a href="#">SignOut</a></Link></li>
+                                                    <li><Link to="/Login"><a href="#">SignOut</a></Link></li>
                                                     <li><Link to="/ForgotPass"><a href="#">ForgotPassWord</a></Link></li>
                                                     </ul>
                                             </div>
@@ -68,4 +79,9 @@ class HeaderD extends Component
         );
     }
 }
-export default HeaderD;
+function mapStateToProps(state){
+    return {
+        masuk:state.userid
+    };
+  }
+export default connect(mapStateToProps)(HeaderD)

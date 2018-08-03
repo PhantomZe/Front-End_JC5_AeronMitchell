@@ -30,7 +30,7 @@ import AllProduct from './component/AllProduct';
 
 
 import Action from './component/IsiCategory/Action';
-  import Action1 from './component/DataGame/Action1';
+  import Detail from './component/DataGame/Detail';
 import Simulation from './component/IsiCategory/Simulation';
 import Fantasy from './component/IsiCategory/Fantasy';
 import Horror from './component/IsiCategory/Horror';
@@ -56,7 +56,6 @@ class App extends Component {
             <Route path="/Cart" component={Cart}/>
             <Route path="/AllProduct" component={AllProduct}/>
             <Route path="/Action" component={Action}/>
-              <Route path="/Action1" component={Action1}/>
             <Route path="/Simulation" component={Simulation}/>
             <Route path="/RPG" component={RPG}/>
             <Route path="/Fantasy" component={Fantasy}/>
@@ -66,6 +65,7 @@ class App extends Component {
             <Route path="/Sport" component={Sport}/>
             <Route path="/Survival" component={Survival}/>
             <Route path="/masuk" component={masuk}/> 
+            <Route path="/Detail" component={Detail} />
       </div>
     );
   }
