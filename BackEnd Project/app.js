@@ -82,7 +82,10 @@ app.get('/IsiProduk/:id',function(req,res)
         {
             if(err) throw err; 
             product=result
-            res.json(product)
+            if(product!=undefined)
+            {
+                res.json(product)
+            }
         });
     }
     else
@@ -368,13 +371,45 @@ app.post('/Cart/:Process',function(req,res)
         var productid=req.body.productid;
         var harga=req.body.harga;
         var jumlah=req.body.jumlah;
-        var finalprice=jumlah*harga
-        var mysql = 'INSERT INTO cart SET product_id=?,user_id=?,process_data=?,Jumlah=?,finalprice=?';
-        db.query(mysql, [productid,user_id,Process,jumlah,finalprice], (err, result)=>
+        var finalprice=jumlah*harga;
+        var cek='Select * FROM cart where user_id=?'
+        db.query(cek, [user_id], (err, result)=>
+        {  
+            var u=0
+            if(err) throw err;
+            for(i=0;i<result.length;i++)
+            {
+                if(result[i].product_id == productid)
+                {
+                    var lol='Update cart SET Jumlah=? where id=?'
+                    db.query(lol, [result[i].Jumlah+1,result[i].id], (err, result)=>
+                    {
+                    });
+                    u++
+                }
+            }
+            if(u == 0)
+            {
+                var mysql = 'INSERT INTO cart SET product_id=?,user_id=?,Jumlah=?,harga=?,hargatotal=?';
+                db.query(mysql, [productid,user_id,jumlah,harga,finalprice], (err, result)=>
+                {  
+                    if(err) throw err;  
+                    res.end('1')
+                });
+            }
+        });
+        var sql='Select stock FROM product where id=?'
+        db.query(sql, [productid], (err, result)=>
         {  
             if(err) throw err;  
+            var stock=result[0].stock
+            var sisa=stock-jumlah
+            var lol='Update product SET stock=? where id=?'
+            db.query(lol, [sisa,productid], (err, result)=>
+            {
+                res.end('1')
+            });
         });
-        res.end('1')
     }
     else if(Process == 1)
     {
@@ -383,12 +418,42 @@ app.post('/Cart/:Process',function(req,res)
         var hp=req.body.Hp;
         var Nama=req.body.Nama;
         var KodePos=req.body.KodePos;
-        var mysql = 'UPDATE cart SET hp_penerima=?,kode_pos=?,nama_penerima=?,alamat=?,process_data=1,Time=CURRENT_TIMESTAMP  where user_id=? AND process_data=0';
-        db.query(mysql, [hp,KodePos,Nama,alamat,user_id], (err, result)=>
-        {  
-            if(err) throw err;  
+        var Cart=req.body.Cart;
+        var CaraBayar=req.body.CaraBayar;
+        var carakirim=req.body.CaraKirim
+        // var mysql = 'UPDATE cart SET hp_penerima=?,kode_pos=?,nama_penerima=?,alamat=?,process_data=1,Time=CURRENT_TIMESTAMP  where user_id=? AND process_data=0';
+        // db.query(mysql, [hp,KodePos,Nama,alamat,user_id], (err, result)=>
+        // {  
+        //     if(err) throw err;  
+        // });
+        // res.end('1')
+        var finalprice=0;
+        for(i=0;i<Cart.length;i++)
+        {
+            finalprice+=Cart[i].hargatotal
+        }
+        var DeleteCart='DELETE FROM cart WHERE user_id = ?'
+        db.query(DeleteCart, [user_id], (err, result)=>
+        {
+            if(err) throw err;
         });
-        res.end('1')
+        var invoiceid=0
+        var InsertInvoice='INSERT INTO invoice SET user_id=?,nama_penerima=?,kode_pos=?,alamat=?,hp_penerima=?,finalprice=?,carakirim=?,carabayar=?,processdata=?'
+        db.query(InsertInvoice, [user_id,Nama,KodePos,alamat,hp,finalprice,carakirim,CaraBayar,0], (err, result)=>
+        {
+            if(err) throw err;
+            invoiceid=result.insertId
+            for(i=0;i<Cart.length;i++)
+            {
+                var InvoiceDetail='INSERT INTO invoice_detail SET invoice_id=?,category_name=?,product_name=?,jumlah=?,harga=?,hargatotal=?'
+                db.query(InvoiceDetail, [invoiceid,Cart[i].category,Cart[i].product_name,Cart[i].jumlah,Cart[i].harga,Cart[i].hargatotal], (err, result)=>
+                {
+                    if(err) throw err;
+                    console.log('berhasil')
+                });
+            }
+            res.end('1')
+        });
     }
     else if(Process == 5)
     {
@@ -396,12 +461,63 @@ app.post('/Cart/:Process',function(req,res)
         var jumlah=req.body.jumlah;
         var harga=req.body.harga;
         var finalprice=jumlah*harga;
-        var mysql = 'UPDATE cart SET Jumlah=?,finalprice=? where id=?';
+        var cek='Select * FROM cart where id=?'
+        db.query(cek, [idCart], (err, result)=>
+        {
+            console.log(jumlah)
+            console.log(result[0].Jumlah)
+            var productid=result[0].product_id
+            if(jumlah>result[0].Jumlah)
+            {
+                var hasil=jumlah-result[0].Jumlah
+                var sql='Select stock FROM product where id=?'
+                db.query(sql, [productid], (err, result)=>
+                {  
+                    if(err) throw err;  
+                    var poke=result[0].stock
+                    var sisa=poke-hasil
+                    var lol='Update product SET stock=? where id=?'
+                    db.query(lol, [sisa,productid], (err, result)=>
+                    {
+                    });
+                });
+            }
+            else
+            {
+                var hasil=result[0].Jumlah-jumlah
+                var sql='Select stock FROM product where id=?'
+                db.query(sql, [productid], (err, poke)=>
+                {  
+                    if(err) throw err;  
+                    var result=poke[0].stock
+                    var sisa=result+hasil
+                    var lol='Update product SET stock=? where id=?'
+                    db.query(lol, [sisa,productid], (err, result)=>
+                    {
+                    });
+                });
+            }
+        });
+        var mysql = 'UPDATE cart SET Jumlah=?,hargatotal=? where id=?';
         db.query(mysql, [jumlah,finalprice,idCart], (err, result)=>
         {  
             if(err) throw err;  
         });
         res.end('1')
+    }
+    else if(Process == 6)
+    {
+        var id=req.body.id
+        var process=req.body.process
+        var sql = 'UPDATE invoice SET processdata=?  where id=?';
+        db.query(sql,[process,id], (err, result)=>
+        {
+            if(err){
+                throw err;
+            } else {
+                res.json(result);
+            }
+        });
     }
 })
 app.get('/Cart/:Process',function(req,res)
@@ -411,12 +527,28 @@ app.get('/Cart/:Process',function(req,res)
     {
         var id=req.query.id
         Cart=[]
-        var sql = 'SELECT cart.id,product.product_name,product.harga,category.category,cart.jumlah,cart.finalprice FROM cart,product,category where (user_id = ? AND process_data = ?)AND(cart.product_id=product.id AND product.category_id=category.id)';
-        db.query(sql,[id,Process], (err, result)=>
+        var sql = 'SELECT cart.id,product.product_name,product.harga,category.category,cart.jumlah,cart.hargatotal FROM cart,product,category where user_id = ?AND(cart.product_id=product.id AND product.category_id=category.id)';
+        db.query(sql,[id], (err, result)=>
         {
             if(err){
                 throw err;
-            } else {
+            } 
+            else if(result != undefined){
+                res.json(result);
+            }
+        });
+    }
+    else if(Process == 1)
+    {
+        var id=req.query.id;
+        var Invoice=[];
+        var sql = 'SELECT * FROM invoice where user_id=?';
+        db.query(sql,[id], (err, result)=>
+        {
+            if(err){
+                throw err;
+            } 
+            else if(result != undefined){
                 res.json(result);
             }
         });
@@ -433,6 +565,28 @@ app.get('/Cart/:Process',function(req,res)
             }
         });
     }
+    else if(Process == 6)
+    {
+        var id=req.query.id;
+        var sql = 'SELECT * FROM invoice_detail where invoice_id=?';
+        db.query(sql,[id,Process], (err, result)=>
+        {
+            if(err){
+                throw err;
+            } else {
+                res.json(result);
+            }
+        });
+    }
+})
+app.post('/DeleteCart',function(req,res)
+{
+    id=req.body.id
+    var DeleteCart='DELETE FROM cart WHERE id = ?'
+        db.query(DeleteCart, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
 })
 ///////////////////////////////////////////
 app.listen(port, () => {

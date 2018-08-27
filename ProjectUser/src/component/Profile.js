@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route,Redirect } from 'react-router-dom';
 
 import Header from './Header';
 import Footer from './Footer';
+
+import axios from 'axios';
+import { connect } from 'react-redux';
 
 import Data1 from './DataProf/Data1';
 import Data2 from './DataProf/Data2';
@@ -15,10 +18,107 @@ import FotoUser from './img/Foto.jpg'
 
 class Profile extends Component
 {
-    
+    state=
+    {
+        Invoice:[],
+        redirect:false
+    }
+    componentDidMount()
+    {
+        axios.get(`http://localhost:3001/Cart/1?id=`+this.props.userid).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                this.setState({
+                    Invoice:ambilData.data
+                });
+            }
+        )
+    }
+    UpdateBayar = (obj) =>
+    {
+        console.log(obj.id)
+        axios.post(`http://localhost:3001/Cart/6`,
+        {
+            id:obj.id,
+            process:1
+        })
+        axios.get(`http://localhost:3001/Cart/1?id=`+this.props.userid).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                this.setState({
+                    Invoice:ambilData.data
+                });
+            }
+        )
+    }
     render()
     {
-        
+        console.log(this.state.Invoice)
+        if(this.props.userid === 0)
+        {
+            return <Redirect to='/Login'/>
+        }
+        const IsiInvoice = this.state.Invoice.map(
+            (isi, urutan) => 
+            {
+                var id= isi.id;
+                var nama_penerima=isi.nama_penerima;
+                var telp=isi.hp_penerima;
+                var alamat=isi.alamat;
+                var kodepos=isi.kode_pos;
+                var finalprice=isi.finalprice;
+                var carakirim=isi.carakirim;
+                var carabayar=isi.carabayar;
+                var process=isi.processdata; 
+                var time=isi.Time.split('T')[0];
+                if(process == 0)
+                {
+                    return <tr key={urutan} style={{textAlign: 'left'}}>
+                        <td>{urutan+1}</td>
+                        <td>
+                        #{id}
+                        </td>
+                        <td className="desc">{nama_penerima}</td>
+                        <td className="text-right">{telp}</td>
+                        <td className="text-right">    
+                            {alamat}
+                        </td>
+                        <td>{kodepos}</td>
+                        <td>Rp.{finalprice}</td>
+                        <td>{carakirim}</td>
+                        <td>{carabayar}</td>
+                        <td>{time}</td>
+                        <td>
+                            <button className='btn btn-success' onClick={() => this.UpdateBayar({id})}>Bayar</button>&nbsp;&nbsp;
+                            <Link to={{pathname:'/Invoice1',state:{id:id}}}><button className='btn btn-info'>Detail</button></Link>
+                        </td>
+                    </tr>
+                }
+                else if(process == 1)
+                {
+                    return <tr key={urutan} style={{textAlign: 'left'}}>
+                        <td>{urutan+1}</td>
+                        <td>
+                        #{id}
+                        </td>
+                        <td className="desc">{nama_penerima}</td>
+                        <td className="text-right">{telp}</td>
+                        <td className="text-right">    
+                            {alamat}
+                        </td>
+                        <td>{kodepos}</td>
+                        <td>Rp.{finalprice}</td>
+                        <td>{carakirim}</td>
+                        <td>{carabayar}</td>
+                        <td>{time}</td>
+                        <td>
+                            <button className='btn btn-success disabled' onClick={() => this.UpdateBayar({id})}>Bayar</button>&nbsp;&nbsp;
+                            <Link to={{pathname:'/Invoice1',state:{id:id}}}><button className='btn btn-info'>Detail</button></Link>
+                        </td>
+                    </tr>
+                }
+            }
+        );
         return(
         <div>
             <Header />
@@ -80,6 +180,8 @@ class Profile extends Component
                                     data-parent="#lin_Accor">Invoice</h3>
                                 </div>
                                 <div className="panel-body" id="ResTab">
+                                <h4>Cara Pembayaran</h4>
+                                <p>Transfer ke rekening ****** ke debit bca dengan harga yang ditentukan dengan informasi tambahan #nomor id</p>
                                     <table className="table table-striped">
                                         <thead>
                                             <tr>
@@ -87,21 +189,39 @@ class Profile extends Component
                                                     No
                                                 </th>
                                                 <th>
-                                                    Transaction
+                                                    id
                                                 </th>
                                                 <th>
-                                                    Harga
+                                                    Nama Penerima
                                                 </th>
                                                 <th>
-                                                    Tanggal
+                                                    Telepon
                                                 </th>
                                                 <th>
-                                                    Detail
+                                                    Alamat
+                                                </th>
+                                                <th>
+                                                    KodePos
+                                                </th>
+                                                <th>
+                                                    Price
+                                                </th>
+                                                <th>
+                                                    Pengiriman
+                                                </th>
+                                                <th>
+                                                    Pembayaran
+                                                </th>
+                                                <th>
+                                                    Time
+                                                </th>
+                                                <th>
+                                                    
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {/* <tr>
                                                 <td>
                                                     1.
                                                 </td>
@@ -117,7 +237,8 @@ class Profile extends Component
                                                 <td>
                                                     <a href="#"><Link to='/Invoice1'><button className="btn btn-primary">Details</button></Link></a>
                                                 </td>
-                                            </tr>
+                                            </tr> */}
+                                            {IsiInvoice}
                                         </tbody>
                                     </table>
                                 </div>
@@ -130,4 +251,9 @@ class Profile extends Component
         );
     }
 }
-export default Profile;
+function mapStateToProps(state){
+    return {
+        userid:state.userid
+    };
+  }
+export default connect(mapStateToProps)(Profile)

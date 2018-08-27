@@ -21,7 +21,7 @@ class Header extends Component
                 <li><Link to="/Profile"><a href="#">Profile</a></Link></li>
                 <li><Link to="/Cart"><a href="#">Cart</a></Link></li>
                 <li><Link to="/AllProduct"><a href="#">All Product</a></Link></li>
-                <li>
+                {/* <li>
                     <div className="dropdown" id="Drop">
                         <button className="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             Pilih Game <div className="caret"></div>
@@ -38,7 +38,7 @@ class Header extends Component
                             <li><Link to="/War"><a href="#">War</a></Link></li>
                             </ul>
                     </div>
-                </li>
+                </li> */}
                 </ul>
                     <div className="btn-group btn-group-lg navbar-right">
                     <button class="btn btn-primary navbar-btn"><Link to="/Register"><a href="#"> Register</a> </Link></button>

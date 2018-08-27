@@ -24,7 +24,8 @@ class AllProduct extends Component
         IsiProduk:[],
         idCategory:0,
         redirect:false,
-        alert:false
+        alert:false,
+        StockAbis:false,
     }
     componentDidMount()
     {
@@ -68,20 +69,26 @@ class AllProduct extends Component
         }
         else
         {
-            axios.post(`http://localhost:3001/Cart/0`,
+            if(obj.Stock >= 1)
             {
-                userid:obj.userid,
-                productid:obj.id,
-                harga:obj.harga,
-                jumlah:1
-            }).then(function(response)
-            {
-                if(response.data == '1')
+                axios.post(`http://localhost:3001/Cart/0`,
                 {
-                    self.setState({alert:true})
-                }        
-            })
-            
+                    userid:obj.userid,
+                    productid:obj.id,
+                    harga:obj.harga,
+                    jumlah:1
+                }).then(function(response)
+                {
+                    if(response.data == '1')
+                    {
+                        self.setState({alert:true})
+                    }        
+                })
+            }
+            else
+            {
+                self.setState({StockAbis:true})
+            }
         }
     }
     render()
@@ -89,6 +96,10 @@ class AllProduct extends Component
         if(this.state.alert)
         {
             alert('Cart berhasil')
+        }
+        if(this.state.StockAbis)
+        {
+            alert('Stock Abis')
         }
         if(this.state.redirect)
         {
@@ -103,17 +114,19 @@ class AllProduct extends Component
                 var harga = isi.harga;
                 var image = isi.image +'.jpeg';
                 var idCategory = isi.category_id;
+                var Stock=isi.stock
                 return <tr key={urutan} style={{textAlign: 'left'}}>
                 <td>{urutan+1}</td>
                 <td>
-                <Link to={{pathname:'/Detail',state:{id:id}}}>{namaProduk}</Link>
+                <Link to={{pathname:'/Detail',state:{id:id,Stock:Stock}}}>{namaProduk}</Link>
                 </td>
                 <td className="desc">{Category}</td>
                 <td className="text-right">{harga}</td>
                 <td><img className="img-thumbnail" src={'http://localhost:3001/images/'+image}/></td>
+                <td>{Stock}</td>
                 <td className="text-right">    
                     <div className="table-data-feature">
-                        <button  onClick={() => this.AddCart({id:id,harga:harga,userid:this.props.userid})} className="btn btn-success" >
+                        <button  onClick={() => this.AddCart({id:id,harga:harga,userid:this.props.userid,Stock:Stock})} className="btn btn-success" >
                             Add To Cart
                         </button>
                     </div>
@@ -168,6 +181,7 @@ class AllProduct extends Component
                                                 <th>Nama</th>
                                                 <th>Category</th>
                                                 <th  className="text-right">Harga</th>
+                                                <th  className="text-right">Stock</th>
                                                 <th></th>
                                             </tr>
                                             </thead>

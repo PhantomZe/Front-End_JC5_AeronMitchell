@@ -139,39 +139,84 @@ class Table extends Component
             (isi,urutan) =>
             {
                 var id= isi.id;
-                var namacategory = isi.category;
-                var harga=isi.harga;
-                var jumlah=isi.jumlah;
-                var namaProduk=isi.product_name;
-                var finalprice=isi.finalprice;
-                var hp=isi.hp_penerima;
-                var kodepos=isi.kode_pos;
-                var nama=isi.nama_penerima;
+                var nama_penerima=isi.nama_penerima;
+                var telp=isi.hp_penerima;
                 var alamat=isi.alamat;
-                var time=isi.Time.split('T')[0]
-                var ProcessData=isi.process_data;
-                if(ProcessData == 0)
+                var kodepos=isi.kode_pos;
+                var finalprice=isi.finalprice;
+                var carakirim=isi.carakirim;
+                var carabayar=isi.carabayar;
+                var process=isi.processdata; 
+                var time=isi.Time.split('T')[0];
+                if(process == 0)
                 {
-                    var Bayar='Belom Bayar'
-                }
-                else if(ProcessData == 1)
-                {
-                    var Bayar='Sudah Bayar'
-                }
-                    return <tr key={urutan} className="tr-shadow" style={{textAlign: 'left'}}>
-                    <td>#{id}</td>
-                    <td>{namaProduk}</td>
-                    <td className='desc'>{namacategory}</td>
-                    <td className="text-right">{harga}</td>
-                    <td>{jumlah}</td>
-                    <td className="text-right">{finalprice}</td>
-                    <td>{nama}</td>
-                    <td>{hp}</td>
-                    <td>{kodepos}</td>
-                    <td>{alamat}</td>
-                    <td>{time}</td>
-                    <td>{Bayar}</td>
+                    return <tr key={urutan} style={{textAlign: 'left'}}>
+                        <td>{urutan+1}</td>
+                        <td>
+                        #{id}
+                        </td>
+                        <td className="desc">{nama_penerima}</td>
+                        <td className="text-right">{telp}</td>
+                        <td className="text-right">    
+                            {alamat}
+                        </td>
+                        <td>{kodepos}</td>
+                        <td>Rp.{finalprice}</td>
+                        <td>{carakirim}</td>
+                        <td>{carabayar}</td>
+                        <td>{time}</td>
+                        <td>
+                            
+                                <button type="button" className='btn btn-danger' onClick={() => this.Cancel({id})}>Delete</button>&nbsp;&nbsp;
+                                <Link to={{pathname:'/DetailInvoice',state:{id:id}}}><button type="button" className='btn btn-info'>Detail</button></Link>
+                        </td>
                     </tr>
+                }
+                else if(process == 1)
+                {
+                    return <tr key={urutan} style={{textAlign: 'left'}}>
+                        <td>{urutan+1}</td>
+                        <td>
+                        #{id}
+                        </td>
+                        <td className="desc">{nama_penerima}</td>
+                        <td className="text-right">{telp}</td>
+                        <td className="text-right">    
+                            {alamat}
+                        </td>
+                        <td>{kodepos}</td>
+                        <td>Rp.{finalprice}</td>
+                        <td>{carakirim}</td>
+                        <td>{carabayar}</td>
+                        <td>{time}</td>
+                        <td>
+                            <button className='btn btn-success' onClick={() => this.Confirmasi({id})}>Confirmasi</button>&nbsp;&nbsp;
+                            <Link to={{pathname:'/DetailInvoice',state:{id:id}}}><button className='btn btn-info'>Detail</button></Link>
+                        </td>
+                    </tr>
+                }
+                else if(process == 2)
+                {
+                    return <tr key={urutan} style={{textAlign: 'left'}}>
+                        <td>{urutan+1}</td>
+                        <td>
+                        #{id}
+                        </td>
+                        <td className="desc">{nama_penerima}</td>
+                        <td className="text-right">{telp}</td>
+                        <td className="text-right">    
+                            {alamat}
+                        </td>
+                        <td>{kodepos}</td>
+                        <td>Rp.{finalprice}</td>
+                        <td>{carakirim}</td>
+                        <td>{carabayar}</td>
+                        <td>{time}</td>
+                        <td>
+                            <Link to={{pathname:'/DetailInvoice',state:{id:id}}}><button className='btn btn-info'>Detail</button></Link>
+                        </td>
+                    </tr>
+                }
             }
         )
         return(
@@ -430,18 +475,39 @@ class Table extends Component
                                             <table className="table table-data2">
                                                 <thead>
                                                     <tr>
-                                                        <th>Id Invoice</th>
-                                                        <th>Game Name</th>
-                                                        <th>Category</th>
-                                                        <th className="text-right">Price</th>
-                                                        <th>Jumlah</th>
-                                                        <th className="text-right">TotalPrice</th>
-                                                        <th>Nama Penerima</th>
-                                                        <th>Hp Penerima</th>
-                                                        <th>KodePos</th>
-                                                        <th>alamat</th>
-                                                        <th>Time</th>
-                                                        <th>ProcessData</th>
+                                                        <th>
+                                                            No
+                                                        </th>
+                                                        <th>
+                                                            id
+                                                        </th>
+                                                        <th>
+                                                            Nama Penerima
+                                                        </th>
+                                                        <th>
+                                                            Telepon
+                                                        </th>
+                                                        <th>
+                                                            Alamat
+                                                        </th>
+                                                        <th>
+                                                            KodePos
+                                                        </th>
+                                                        <th>
+                                                            Price
+                                                        </th>
+                                                        <th>
+                                                            Pengiriman
+                                                        </th>
+                                                        <th>
+                                                            Pembayaran
+                                                        </th>
+                                                        <th>
+                                                            Time
+                                                        </th>
+                                                        <th>
+                                                            
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                             <tbody>

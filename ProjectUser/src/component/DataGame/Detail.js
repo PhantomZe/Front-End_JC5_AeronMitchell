@@ -23,6 +23,7 @@ class Detail extends Component
         redirect:false,
         insertres:'',
         images:'',
+        StockAbis:false,
     }
     componentDidMount()
     {
@@ -55,20 +56,26 @@ class Detail extends Component
         }
         else
         {
-            axios.post(`http://localhost:3001/Cart/0`,
+            if(this.props.location.state.Stock >= 1)
             {
-                userid:obj.userid,
-                productid:obj.id,
-                harga:obj.harga,
-                jumlah:1
-            }).then(function(response)
-            {
-                if(response.data == '1')
+                axios.post(`http://localhost:3001/Cart/0`,
                 {
-                    self.setState({alert:true})
-                }        
-            })
-            
+                    userid:obj.userid,
+                    productid:obj.id,
+                    harga:obj.harga,
+                    jumlah:1
+                }).then(function(response)
+                {
+                    if(response.data == '1')
+                    {
+                        self.setState({alert:true})
+                    }        
+                })
+            }
+            else
+            {
+                self.setState({StockAbis:true})
+            }
         }
     }
     render()
@@ -80,6 +87,10 @@ class Detail extends Component
         if(this.state.redirect)
         {
             return <Redirect to='/Login'/>
+        }
+        if(this.state.StockAbis)
+        {
+            alert('Stock Abis')
         }
         return(
         <div>
