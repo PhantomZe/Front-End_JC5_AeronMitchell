@@ -18,7 +18,8 @@ class Cart extends Component
         finalprice:0,
         CaraKirim:'Gojek',
         CaraBayar:'Debit',
-        redirect:false
+        redirect:false,
+        StockAbis:false,
     }
     componentDidMount()
     {
@@ -39,7 +40,15 @@ class Cart extends Component
                 idcart:this.state.Cart[x].id,
                 jumlah:obj.target.value,
                 harga:this.state.Cart[x].harga    
-        })
+        }).then(function(response)
+        {
+            if(response.data == 0)
+            {
+                this.setState({
+                    StockAbis:true
+                })
+            }
+        });
         axios.get(`http://localhost:3001/Cart/0?id=`+this.props.userid).then(
             /** Disini fungsi */
             (ambilData) => {
@@ -89,7 +98,9 @@ class Cart extends Component
     {
         axios.post(`http://localhost:3001/DeleteCart`,
         {
-            id:obj.id
+            id:obj.id,
+            jumlah:obj.jumlah,
+            product_id:obj.product_id
         })
         axios.get(`http://localhost:3001/Cart/0?id=`+this.props.userid).then(
             /** Disini fungsi */
@@ -102,6 +113,10 @@ class Cart extends Component
     }
     render()
     {
+        if(this.state.StockAbis)
+        {
+            alert('Stock Abis')
+        }
         if(this.props.userid === 0)
         {
             return <Redirect to='/Login'/>
@@ -125,6 +140,7 @@ class Cart extends Component
                 var harga = isi.harga;
                 var jumlah = isi.jumlah;
                 var totalprice=isi.hargatotal;
+                var product_id=isi.product_id;
                 return <tr key={urutan} style={{textAlign: 'left'}}>
                 <td>{urutan+1}</td>
                 <td>
@@ -136,7 +152,7 @@ class Cart extends Component
                     <input type="number" onChange={this.Change} name={urutan} className="StyleG" defaultValue={jumlah}/>
                 </td>
                 <td>{totalprice}</td>
-                <td><button className='btn btn-danger' onClick={() => this.Update({id})}>Cancel</button></td>
+                <td><button className='btn btn-danger' onClick={() => this.Update({id,jumlah,product_id})}>Cancel</button></td>
             </tr>
             }
         );

@@ -216,13 +216,14 @@ app.post('/AddProduk', (req, res) =>
     var sql = 'SELECT product_name FROM product';
     db.query(sql, (err, result)=>
     {
+        var u=0
         if(err) throw err; 
         SemuaProd=result
         for(i=0;i<SemuaProd.length;i++)
         {
             if(Name==SemuaProd[i])
             {
-                res.end('Sudah Ada Category Terrsebut');   
+                res.end('Sudah Ada Produk Terrsebut');   
                 u++;
             }
         };
@@ -476,10 +477,23 @@ app.post('/Cart/:Process',function(req,res)
                     if(err) throw err;  
                     var poke=result[0].stock
                     var sisa=poke-hasil
-                    var lol='Update product SET stock=? where id=?'
-                    db.query(lol, [sisa,productid], (err, result)=>
+                    if(sisa>=0)
                     {
-                    });
+                        var lol='Update product SET stock=? where id=?'
+                        db.query(lol, [sisa,productid], (err, result)=>
+                        {
+                            var mysql = 'UPDATE cart SET Jumlah=?,hargatotal=? where id=?';
+                            db.query(mysql, [jumlah,finalprice,idCart], (err, result)=>
+                            {  
+                                if(err) throw err;  
+                            });
+                            res.end('1')
+                        });
+                    }
+                    else
+                    {
+                        res.end('0')
+                    }
                 });
             }
             else
@@ -496,14 +510,14 @@ app.post('/Cart/:Process',function(req,res)
                     {
                     });
                 });
+                var mysql = 'UPDATE cart SET Jumlah=?,hargatotal=? where id=?';
+                db.query(mysql, [jumlah,finalprice,idCart], (err, result)=>
+                {  
+                    if(err) throw err;  
+                });
+                res.end('1')
             }
         });
-        var mysql = 'UPDATE cart SET Jumlah=?,hargatotal=? where id=?';
-        db.query(mysql, [jumlah,finalprice,idCart], (err, result)=>
-        {  
-            if(err) throw err;  
-        });
-        res.end('1')
     }
     else if(Process == 6)
     {
@@ -527,7 +541,7 @@ app.get('/Cart/:Process',function(req,res)
     {
         var id=req.query.id
         Cart=[]
-        var sql = 'SELECT cart.id,product.product_name,product.harga,category.category,cart.jumlah,cart.hargatotal FROM cart,product,category where user_id = ?AND(cart.product_id=product.id AND product.category_id=category.id)';
+        var sql = 'SELECT cart.id,product.product_name,product.harga,category.category,cart.jumlah,cart.hargatotal,cart.product_id FROM cart,product,category where user_id = ?AND(cart.product_id=product.id AND product.category_id=category.id)';
         db.query(sql,[id], (err, result)=>
         {
             if(err){
@@ -581,14 +595,123 @@ app.get('/Cart/:Process',function(req,res)
 })
 app.post('/DeleteCart',function(req,res)
 {
-    id=req.body.id
+    var id=req.body.id
+    var hasil=req.body.jumlah
+    var productid=req.body.product_id
     var DeleteCart='DELETE FROM cart WHERE id = ?'
         db.query(DeleteCart, [id], (err, result)=>
         {
             if(err) throw err;
+            var sql='Select stock FROM product where id=?'
+            db.query(sql, [productid], (err, poke)=>
+            {  
+                if(err) throw err;  
+                var result=poke[0].stock
+                var sisa=result+hasil
+                var lol='Update product SET stock=? where id=?'
+                db.query(lol, [sisa,productid], (err, result)=>
+                {
+                });
+            });
         });
 })
+app.post('/DeleteInvoice',function(req,res)
+{
+    var id=req.body.id
+    var DeleteInvoice='DELETE FROM invoice WHERE id = ?'
+        db.query(DeleteInvoice, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
+    var DeleteDetail='DELETE FROM invoice_detail WHERE invoice_id = ?'
+        db.query(DeleteDetail, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
+})
+app.post('/Confirm/:Process',function(req,res)
+{
+    var Process=req.params.Process;
+    var id=req.body.id;
+    var mysql='UPDATE invoice SET processdata=?  where id=?'
+    db.query(mysql,[Process,id], (err, result)=>
+        {
+            if(err){
+                throw err;
+            }
+            res.end('1')
+        });
+
+});
+
 ///////////////////////////////////////////
+/////////////Delete Produk Category////////
+app.post('/DeleteProduct',function(req,res)
+{
+    var id=req.body.id
+    var DeleteDetail='DELETE FROM cart WHERE product_id = ?'
+        db.query(DeleteDetail, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
+        var DeleteInvoice='DELETE FROM product WHERE id = ?'
+        db.query(DeleteInvoice, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
+})
+app.post('/DeleteAll',function(req,res)
+{
+    // var id=req.body.id
+    // var DeleteDetail='DELETE FROM cart INNER JOIN product ON t2. = t1.id WHERE product_id = ?'
+    //     db.query(DeleteDetail, [id], (err, result)=>
+    //     {
+    //         if(err) throw err;
+    //     });
+    //     var DeleteInvoice='DELETE FROM product WHERE category_id = ?'
+    //     db.query(DeleteInvoice, [id], (err, result)=>
+    //     {
+    //         if(err) throw err;
+    //     });
+    for(i=0;i<req.body.IsiProduk.length;i++)
+    {
+        var id=req.body.IsiProduk[i].id
+        var DeleteDetail='DELETE FROM cart WHERE product_id = ?'
+        db.query(DeleteDetail, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
+        var DeleteInvoice='DELETE FROM product WHERE id = ?'
+        db.query(DeleteInvoice, [id], (err, result)=>
+        {
+            if(err) throw err;
+        });
+    }
+})
+app.post('/DeleteCategory',function(req,res)
+{
+    var id=req.body.id
+    var sql = 'SELECT * FROM product where category_id=?';
+    db.query(sql,[id],(err, result)=>
+    {
+        if(err) throw err; 
+        var product=result
+        if(product.length == 0)
+        {
+            var Delete='DELETE FROM category WHERE id = ?'
+            db.query(Delete, [id], (err, result)=>
+            {
+                if(err) throw err;
+                res.end('1')
+            });
+        }
+        else
+        {
+            res.end('0')
+        }
+    });
+})
+//////////////////////////////////////////
 app.listen(port, () => {
     console.log('Server berjalan di port '+port+' ....')
 });

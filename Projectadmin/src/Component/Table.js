@@ -13,7 +13,8 @@ class Table extends Component
         IsiCategory:[],
         IsiProduk:[],
         idCategory:0,
-        isicart:[]
+        isicart:[],
+        redirect:false
     }
     componentDidMount()
     {
@@ -52,10 +53,118 @@ class Table extends Component
                 });
             }
         )
+        this.setState({
+            idCategory:obj.target.value
+        });
+    }
+    Delete = (obj) =>
+    {
+        axios.post('http://localhost:3001/DeleteInvoice',
+        {
+            id:obj.id
+        })
+        axios.get(`http://localhost:3001/Cart/5`).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                this.setState({
+                    isicart: ambilData.data
+                });
+            }
+        )
+    }
+    Confirmasi = (obj) =>
+    {
+        axios.post('http://localhost:3001/Confirm/2',
+        {
+            id:obj.id
+        })
+        axios.get(`http://localhost:3001/Cart/5`).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                this.setState({
+                    isicart: ambilData.data
+                });
+            }
+        )
+    }
+    Cancel = (obj) =>
+    {
+        axios.post('http://localhost:3001/Confirm/0',
+        {
+            id:obj.id
+        })
+        axios.get(`http://localhost:3001/Cart/5`).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                this.setState({
+                    isicart: ambilData.data
+                });
+            }
+        )
+    }
+    DeleteProduk = (obj) =>
+    {
+        axios.post('http://localhost:3001/DeleteProduct',
+        {
+            id:obj.id
+        })
+        axios.get(`http://localhost:3001/IsiProduk/`+this.state.idCategory).then(
+            /** Disini fungsi */
+            (ProdukData) => {
+                this.setState({
+                    IsiProduk: ProdukData.data
+                });
+            }
+        )
+    }
+    DeleteCategory = (obj) =>
+    {
+        var self=this
+        axios.post('http://localhost:3001/DeleteCategory',
+        {
+            id:obj.id
+        }).then(function(response)
+        {
+            console.log(response.data)
+            if(response.data==0)
+            {
+                self.setState({
+                    redirect:true
+                });
+            }
+        })
+        axios.get(`http://localhost:3001/IsiCategory`).then(
+            /** Disini fungsi */
+            (ambilData) => {
+                this.setState({
+                    IsiCategory: ambilData.data
+                });
+            }
+        )
+    }
+    DeleteAll = (obj) =>
+    {
+        axios.post('http://localhost:3001/DeleteAll',
+        {
+            id:obj.id,
+            IsiProduk:this.state.IsiProduk
+        })
+        axios.get(`http://localhost:3001/IsiProduk/`+this.state.idCategory).then(
+            /** Disini fungsi */
+            (ProdukData) => {
+                this.setState({
+                    IsiProduk: ProdukData.data
+                });
+            }
+        )
+        console.log(this.state.IsiProduk)
     }
     render()
     {   
-        console.log(this.state.isicart)
+        if(this.state.redirect)
+        {
+            alert('Delete Produk yang bersagkutan dengan category')
+        }
         const Category = this.state.IsiCategory.map(
             (isi, urutan) => 
             {
@@ -66,7 +175,7 @@ class Table extends Component
                 <Link to={{pathname:'/EditCategory',state:{id:id}}}><h4>{namacategory}</h4></Link>&nbsp;
                 </td>
                 <td>    
-                    <button className="btn btn-danger btn-sm">Delete</button>
+                    <button className="btn btn-danger btn-sm"onClick={() => this.DeleteCategory({id})}>Delete</button>
                 </td>
             </tr>
             }
@@ -94,7 +203,7 @@ class Table extends Component
                                 <Link to={{pathname:'/Edit',state:{id:id}}} className="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i className="zmdi zmdi-edit"></i>
                                 </Link>
-                                <button className="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                <button className="item" data-toggle="tooltip" onClick={() => this.DeleteProduk({id})} data-placement="top" title="Delete">
                                     <i className="zmdi zmdi-delete"></i>
                                 </button>
                             </div>
@@ -116,7 +225,7 @@ class Table extends Component
                                 <Link to={{pathname:'/Edit',state:{id:id}}} className="item" data-toggle="tooltip" data-placement="top" title="Edit">
                                     <i className="zmdi zmdi-edit"></i>
                                 </Link>
-                                <button className="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                <button className="item" data-toggle="tooltip"  onClick={() => this.DeleteProduk({id})} data-placement="top" title="Delete">
                                     <i className="zmdi zmdi-delete"></i>
                                 </button>
                             </div>
@@ -167,7 +276,7 @@ class Table extends Component
                         <td>{time}</td>
                         <td>
                             
-                                <button type="button" className='btn btn-danger' onClick={() => this.Cancel({id})}>Delete</button>&nbsp;&nbsp;
+                                <button type="button" className='btn btn-danger' onClick={() => this.Delete({id})}>Delete</button>&nbsp;&nbsp;
                                 <Link to={{pathname:'/DetailInvoice',state:{id:id}}}><button type="button" className='btn btn-info'>Detail</button></Link>
                         </td>
                     </tr>
@@ -191,6 +300,7 @@ class Table extends Component
                         <td>{time}</td>
                         <td>
                             <button className='btn btn-success' onClick={() => this.Confirmasi({id})}>Confirmasi</button>&nbsp;&nbsp;
+                            <button type="button" className='btn btn-danger' onClick={() => this.Cancel({id})}>Cancel</button>&nbsp;&nbsp;
                             <Link to={{pathname:'/DetailInvoice',state:{id:id}}}><button className='btn btn-info'>Detail</button></Link>
                         </td>
                     </tr>
@@ -265,7 +375,7 @@ class Table extends Component
                                                         <th>Category</th>
                                                         <th className="text-right">price</th>
                                                         <th>Stock</th>
-                                                        <th></th>
+                                                        <th><button className="btn btn-danger btn-sm"onClick={() => this.DeleteAll({id:this.state.idCategory})}>Delete</button></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

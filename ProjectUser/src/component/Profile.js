@@ -117,6 +117,28 @@ class Profile extends Component
                         </td>
                     </tr>
                 }
+                else if(process == 2)
+                {
+                    return <tr key={urutan} style={{textAlign: 'left'}}>
+                        <td>{urutan+1}</td>
+                        <td>
+                        #{id}
+                        </td>
+                        <td className="desc">{nama_penerima}</td>
+                        <td className="text-right">{telp}</td>
+                        <td className="text-right">    
+                            {alamat}
+                        </td>
+                        <td>{kodepos}</td>
+                        <td>Rp.{finalprice}</td>
+                        <td>{carakirim}</td>
+                        <td>{carabayar}</td>
+                        <td>{time}</td>
+                        <td>
+                            <Link to={{pathname:'/Invoice1',state:{id:id}}}><button className='btn btn-info'>Detail</button></Link>
+                        </td>
+                    </tr>
+                }
             }
         );
         return(

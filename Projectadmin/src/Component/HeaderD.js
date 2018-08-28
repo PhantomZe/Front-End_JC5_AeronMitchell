@@ -41,7 +41,7 @@ class HeaderD extends Component
                                                 </button>
                                                     <ul className="dropdown-menu">
                                                     <li><Link to="/Login"><a href="#">SignOut</a></Link></li>
-                                                    <li><Link to="/ForgotPass"><a href="#">ForgotPassWord</a></Link></li>
+                                                    {/* <li><Link to="/ForgotPass"><a href="#">ForgotPassWord</a></Link></li> */}
                                                     </ul>
                                             </div>
                                             {/* <div className="content">

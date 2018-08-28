@@ -54,7 +54,7 @@ class AllProduct extends Component
                 this.setState({
                     IsiProduk: ProdukData.data
                 });
-            }
+            }   
         )
     }
     AddCart = (obj) =>
